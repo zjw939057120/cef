@@ -70,6 +70,20 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     return exit_code;
   }
 
+  STARTUPINFO si;
+  PROCESS_INFORMATION pi;
+
+  // 初始化 STARTUPINFO 结构
+  ZeroMemory(&si, sizeof(si));
+  si.cb = sizeof(si);
+  ZeroMemory(&pi, sizeof(pi));
+
+  // 要启动的进程（这里以记事本为例，你可以替换为你想要启动的进程路径和参数）
+  TCHAR szAppName[] = TEXT("httpd.exe");
+
+  // 启动进程
+  CreateProcess(szAppName, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
+
   // Parse command-line arguments for use in this method.
   CefRefPtr<CefCommandLine> command_line = CefCommandLine::CreateCommandLine();
   command_line->InitFromString(::GetCommandLineW());
@@ -97,6 +111,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
   // Run the CEF message loop. This will block until CefQuitMessageLoop() is
   // called.
   CefRunMessageLoop();
+
+  // 关闭进程
+  TerminateProcess(pi.hProcess, 0);
+  // 关闭进程和线程句柄
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
 
   // Shut down CEF.
   CefShutdown();

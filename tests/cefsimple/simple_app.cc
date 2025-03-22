@@ -102,7 +102,7 @@ void SimpleApp::OnContextInitialized() {
   // that instead of the default URL.
   url = command_line->GetSwitchValue("url");
   if (url.empty())
-    url = "http://www.google.com";
+    url = "http://127.0.0.1:8080";
 
   if (use_views) {
     // Create the BrowserView.
